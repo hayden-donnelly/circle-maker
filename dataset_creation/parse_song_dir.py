@@ -30,11 +30,3 @@ df = pd.DataFrame({
     'artist': artists
 })
 print(df.head())
-
-test_string = "title:hellowrold\n"
-pattern = r"title:(.*)\n"
-match = re.search(pattern, test_string)
-
-if match:
-    title = match.group(1)
-    print(title)
