@@ -42,16 +42,17 @@ for name in variable_names:
 for name in category_names:
     data[name] = []
 
-for i in range(len(song_folders)):
-    song_files = os.listdir(song_dir + song_folders[i])
+for song_folder in song_folders:
+    song_files = os.listdir(song_dir + song_folder)
     
-    for j in range(len(song_files)):
-        if song_files[j].endswith(".osu"):
-            data['FileName'].append(song_files[j])
-            
-            with open(song_dir + song_folders[i] + "/" + song_files[j], "r", encoding="utf-8") as f:
+    for song_file in song_files:
+        if song_file.endswith(".osu"):
+            data['FileName'].append(song_file)
+
+            song_path = song_dir + song_folder + "/" + song_file
+            with open(song_path, 'r', encoding='utf8') as f:
                 lines = f.readlines()
-                
+
                 # Parse lines for specified variables.
                 for line in lines:
                     for name in variable_names:
@@ -65,7 +66,6 @@ for i in range(len(song_folders)):
                     # Categories are surrounded by square brackets in osu files, so get rid of them.
                     potential_category = line[1:-2]
                     if potential_category in category_names:
-                        print("Found category: " + potential_category)
                         category_start_indices[potential_category] = lines.index(line) + 1
 
                 # Find the ending index of specified categories and append categories to data.
@@ -90,17 +90,7 @@ for i in range(len(song_folders)):
                 for name in category_names:
                     if len(data[name]) < num_data_points:
                         data[name].append(None)
-            #break
-    break
 
 df = pd.DataFrame(data)
 print(df.head())
 df.to_csv('../data/osu_beatmap_dataset.csv')
-
-test_string = "title:hellowrold\n"
-pattern = r"title:(.*)\n"
-match = re.search(pattern, test_string)
-
-if match:
-    title = match.group(1)
-    print(title)
