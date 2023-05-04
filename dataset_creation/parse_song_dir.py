@@ -91,7 +91,7 @@ for i in range(len(song_folders)):
                     if len(data[name]) < num_data_points:
                         data[name].append(None)
             #break
-    #break
+    break
 
 df = pd.DataFrame(data)
 print(df.head())
